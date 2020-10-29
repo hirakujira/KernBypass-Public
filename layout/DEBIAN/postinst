@@ -1,0 +1,29 @@
+#!/bin/sh
+
+if ! [ -d /var/MobileSoftwareUpdate/mnt1 ]; then
+ echo "/var/MobileSoftwareUpdate/mnt1 FOLDER NOT FOUND"
+
+ mkdir -p /var/MobileSoftwareUpdate/mnt1
+ chmod 700 /var/MobileSoftwareUpdate/mnt1
+ chown root:wheel /var/MobileSoftwareUpdate/mnt1
+
+ echo "/var/MobileSoftwareUpdate/mnt1 FOLDER CREATED SUCCESS"
+fi
+
+rm /var/mobile/Library/Preferences/jp.akusio.kernbypass.plist
+chmod 6755 /usr/bin/kernbypassd
+
+/usr/bin/preparerootfs
+echo "/usr/bin/preparerootfs"
+
+/usr/bin/changerootfs &
+
+echo "/usr/bin/changerootfs &"
+sleep 3
+
+disown %1
+echo "disown %1"
+
+echo "RUNNING DAEMON"
+
+exit 0

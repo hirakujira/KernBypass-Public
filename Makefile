@@ -1,4 +1,4 @@
-ARCHS = arm64
+ARCHS = arm64 arm64e
 
 include $(THEOS)/makefiles/common.mk
 
@@ -28,8 +28,10 @@ endif
 before-package::
 	mkdir -p $(THEOS_STAGING_DIR)/usr/lib/
 	cp $(LIB_DIR)/jelbrekLib.dylib $(THEOS_STAGING_DIR)/usr/lib
-	/usr/bin/ldid -S./ent.plist $(THEOS_STAGING_DIR)/usr/bin/changerootfs
-	/usr/bin/ldid -S./ent.plist $(THEOS_STAGING_DIR)/usr/bin/preparerootfs	
+	/usr/local/bin/ldid -S./ent.plist $(THEOS_STAGING_DIR)/usr/bin/kernbypassd
+	/usr/local/bin/ldid -S./ent.plist $(THEOS_STAGING_DIR)/usr/bin/changerootfs
+	/usr/local/bin/ldid -S./ent.plist $(THEOS_STAGING_DIR)/usr/bin/preparerootfs	
 
 SUBPROJECTS += zzzzzzzzznotifychroot
+SUBPROJECTS += kernbypassd
 include $(THEOS_MAKE_PATH)/aggregate.mk

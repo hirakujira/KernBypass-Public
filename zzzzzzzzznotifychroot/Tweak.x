@@ -1,11 +1,20 @@
 #import <Foundation/Foundation.h>
 #import <CoreFoundation/CoreFoundation.h>
 #import "Tweak.h"
+#include <spawn.h>
+#import <firmware.h>
 
 #define PLIST_PATH @"/var/mobile/Library/Preferences/jp.akusio.kernbypass2.plist"
 #define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
 
 extern CFNotificationCenterRef CFNotificationCenterGetDistributedCenter(void);
+
+static void easy_spawn(const char* args[]){
+    pid_t pid;
+    int status;
+    posix_spawn(&pid, args[0], NULL, NULL, (char* const*)args, NULL);
+    waitpid(pid, &status, WEXITED);
+}
 
 BOOL isEnableApplication(NSString *bundleID){
     NSDictionary* pref = [NSDictionary dictionaryWithContentsOfFile:PLIST_PATH];
@@ -43,9 +52,26 @@ void bypassApplication(NSString *bundleID){
 
 %end
 
+// Automatically enabled on ldrestart and Re-Jailbreak
+%group SpringBoardHook %hook SpringBoard
+- (void)applicationDidFinishLaunching:(id)arg1{
+    %orig;
+    easy_spawn((const char *[]){"/usr/bin/kernbypassd", NULL});
+}
+%end %end
+
+
 %ctor{
     if(IN_SPRINGBOARD)
+    {
         %init(SB);
+        if ([[NSFileManager defaultManager] fileExistsAtPath:@"/usr/bin/kernbypassd"])
+        {
+            %init(SpringBoardHook);
+        }
+    }
     else
+    {
         bypassApplication([NSBundle mainBundle].bundleIdentifier);
+    }
 }

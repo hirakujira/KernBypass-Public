@@ -8,7 +8,7 @@
 #include "utils.h"
 
 #include <sys/syscall.h>
-#include <sys/snapshot.h>
+#include "snapshot.h"
 #include <dirent.h>
 #include <sys/stat.h>
 
