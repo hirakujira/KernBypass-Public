@@ -10,8 +10,11 @@ if ! [ -d /var/MobileSoftwareUpdate/mnt1 ]; then
  echo "/var/MobileSoftwareUpdate/mnt1 FOLDER CREATED SUCCESS"
 fi
 
-rm /var/mobile/Library/Preferences/jp.akusio.kernbypass.plist
+rm -f /var/mobile/Library/Preferences/jp.akusio.kernbypass.plist
+echo "Remove old settings"
+
 chmod 6755 /usr/bin/kernbypassd
+echo "Setup permission"
 
 /usr/bin/preparerootfs
 echo "/usr/bin/preparerootfs"

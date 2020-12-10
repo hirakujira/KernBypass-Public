@@ -1,6 +1,11 @@
 #include <spawn.h>
+#import <stdio.h>
+#import <stdlib.h>
+#import <unistd.h>
 #import <dlfcn.h>
 #import <sys/sysctl.h>
+#import <sys/types.h>
+#import <sys/wait.h>
 
 #define FLAG_PLATFORMIZE (1 << 1)
 

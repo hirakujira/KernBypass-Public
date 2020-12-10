@@ -33,7 +33,7 @@ void bypassApplication(NSString *bundleID){
     NSDictionary* info = @{
         @"Pid" : [NSNumber numberWithInt:pid]
     };
-    CFNotificationCenterPostNotification(CFNotificationCenterGetDistributedCenter(), (__bridge CFStringRef)@"jp.akusio.chrooter", NULL, (__bridge CFDictionaryRef)info, YES);   
+    CFNotificationCenterPostNotification(CFNotificationCenterGetDistributedCenter(), (__bridge CFStringRef)@"jp.akusio.chrooter", NULL, (__bridge CFDictionaryRef)info, YES);
     kill(pid, SIGSTOP);
 }
 
@@ -62,7 +62,7 @@ void bypassApplication(NSString *bundleID){
 
 
 %ctor{
-    if(IN_SPRINGBOARD)
+    if([[NSBundle mainBundle].bundleIdentifier isEqualToString:@"com.apple.springboard"])
     {
         %init(SB);
         if ([[NSFileManager defaultManager] fileExistsAtPath:@"/usr/bin/kernbypassd"])
